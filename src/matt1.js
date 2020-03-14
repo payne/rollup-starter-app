@@ -2,24 +2,27 @@ import format from 'date-fns/format';
 
 
 export default class TextClock {
-    constructor(span) {
+    constructor(span, delta) {
         this.span=span;
+        this.delta = delta;
     }
 
     update2() {
        this.doWork(this.tick);
     }
 
-    tick(sp) {
+    tick(sp, delta) {
         console.log(sp);
-        sp.textContent = format(new Date(), 'h:mm:ssa');
+        const date = new Date();
+        const d = new Date(date.getTime() + delta);
+        sp.textContent = format(d, 'h:mm:ssa');
     }
 
     // from
     // https://odetocode.com/blogs/scott/archive/2015/01/05/more-with-arrow-functions-in-es6.aspx
     doWork(callback) {
         setTimeout(() => {
-            callback(this.span)
+            callback(this.span, this.delta);
             this.doWork(callback);
         }, 1000);
     }
